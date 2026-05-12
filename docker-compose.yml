@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  backend:
+    # Образ будет собираться из Dockerfile в папке ./pc_market_backend
+    build: ./pc_market_backend
+    # Имя образа в вашем GitHub Container Registry
+    image: ghcr.io/sarkushev/jango_2/backend:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./pc_market_backend:/app
+    environment:
+      - DEBUG=1
+    command: python manage.py runserver 0.0.0.0:8000
+
+  frontend:
+    # Образ будет собираться из Dockerfile в папке ./frontend
+    build: ./frontend
+    # Имя образа для фронтенда в GHCR
+    image: ghcr.io/sarkushev/jango_2/frontend:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
